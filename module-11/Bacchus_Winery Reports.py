@@ -38,7 +38,34 @@ def show_tables(connection):
 def show_reports(connection):
     cursor = connection.cursor()
 
-# Code block for generating low selling wines report.  Report covers last 12 months showing the lowest selling wine first.
+    def show_reports(connection):
+        cursor = connection.cursor()
+
+
+    print("\n=== Wine Distribution Report ===")
+    distributor_wine_query = """
+    SELECT 
+        d.Distributor_Name, 
+        GROUP_CONCAT(DISTINCT w.Wine_Name ORDER BY w.Wine_Name SEPARATOR ', ') as Wines
+    FROM distributor d
+    JOIN distributor s ON d.Distributor_ID = s.Distributor_ID
+    JOIN wine w ON s.Wine_ID = w.Wine_ID
+    GROUP BY d.Distributor_Name
+    ORDER BY d.Distributor_Name; 
+    """
+
+    cursor.execute(distributor_wine_query)
+    results = cursor.fetchall()
+    print("\nYear: 2024")
+    print("-" * 70)
+    print(f"{'Distributor Name':<30} | {'Wines Carried'}")
+    print("-" * 70)
+    for row in results:
+        print(f"{row[0]:<30} | {row[1]}")
+    print("-" * 70)
+    print()
+
+    # Code block for generating low selling wines report.  Report covers last 12 months showing the lowest selling wine first.
     print("\n=== Low Selling Wines Report ===")
     low_selling_query = """
     SELECT 
